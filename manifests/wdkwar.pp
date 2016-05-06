@@ -21,6 +21,7 @@ define applicationserver::wdkwar (
   }
   file { "${name}-dfc.properties":
     path    => "${webapps_dir}/${name}/WEB-INF/classes/dfc.properties",
-    source  => 'puppet:///modules/applicationserver/dfc.properties',
+#    source  => 'puppet:///modules/applicationserver/dfc.properties',
+    content   => template('applicationserver/dfc.properties'),
   }
 }

@@ -40,11 +40,19 @@ class applicationserver (
     source  => 'puppet:///modules/applicationserver/web.xml',
     require => Tomcat::Instance['apache-tomcat-7.0.65'],
   }
+  file { 'server.xml':
+    ensure    => file,
+    path    => "${catalina_home}/conf/server.xml",
+    content   => template('applicationserver/server.xml.erb'),
+    require => Tomcat::Instance['apache-tomcat-7.0.65'],
+  }
+
   file { 'setenv.sh':
     path    => "${catalina_home}/bin/setenv.sh",
     source  => 'puppet:///modules/applicationserver/setenv.sh',
     require => Tomcat::Instance['apache-tomcat-7.0.65'],
   }
+
   applicationserver::wdkwar { 'da':
     war_source  => '/opt/software/Documentum/D71/da.war',
     webapps_dir => "${catalina_home}/webapps",
@@ -56,6 +64,7 @@ class applicationserver (
       File [ 'catalina.properties'],
       File [ 'context.xml'],
       File [ 'web.xml'],
+      File [ 'server.xml'],
       Applicationserver::Wdkwar[da],
     ]
   }
